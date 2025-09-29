@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://dk5uuadk0v445"]
+
+[ext_resource type="Script" uid="uid://d3apqunpb8yrt" path="res://player.gd" id="1_kpjcp"]
+[ext_resource type="PackedScene" uid="uid://hs1670eubkjt" path="res://art/Rabbit Grey.glb" id="1_xhfnw"]
+[ext_resource type="PackedScene" uid="uid://d0ypm0v45pwdv" path="res://art/player.glb" id="3_kne1u"]
+[ext_resource type="PackedScene" uid="uid://h4qthyndp5ta" path="res://art/Zombie.glb" id="4_e80uo"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_kne1u"]
+radius = 0.8
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_kne1u"]
+height = 1.375
+
+[node name="Player" type="CharacterBody3D"]
+collision_mask = 6
+script = ExtResource("1_kpjcp")
+
+[node name="pivot" type="Node3D" parent="."]
+
+[node name="Character" parent="pivot" instance=ExtResource("1_xhfnw")]
+transform = Transform3D(-0.1, 0, -2.53518e-07, 0, 0.1, 0, 2.53518e-07, 0, -0.1, 0, 0, 0)
+visible = false
+
+[node name="player" parent="pivot" instance=ExtResource("3_kne1u")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.1, 0)
+visible = false
+
+[node name="Root Scene" parent="pivot" instance=ExtResource("4_e80uo")]
+transform = Transform3D(-0.286526, 0, 0.0291042, 0, 0.288, 0, -0.0291042, 0, -0.286526, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0.18, 0)
+shape = SubResource("SphereShape3D_kne1u")
+
+[node name="MobDetecter" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MobDetecter"]
+transform = Transform3D(0.35, 0, 0, 0, 0.3, 0, 0, 0, 0.6, 0, 0.4, 0)
+shape = SubResource("CylinderShape3D_kne1u")
+
+[connection signal="body_entered" from="MobDetecter" to="." method="_on_mob_detecter_body_entered"]
